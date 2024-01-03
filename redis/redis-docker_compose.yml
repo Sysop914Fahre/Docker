@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  redis:
+  image: redis:alpine
+  container_name: redis
+  restart: always
+  command: redis-server --requirepass teste --appendonly yes
+  volumes:
+    - /dockerapp/redis/data:/data

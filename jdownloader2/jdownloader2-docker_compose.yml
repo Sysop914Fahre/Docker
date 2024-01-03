@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  jdownloader-2:
+    image: jlesage/jdownloader-2
+    restart: always
+    ports:
+      - "5800:5800"
+    environment:
+      # Optional: put your config options customization here. Examples:
+      - USER_ID=1000
+	  - GROUP_ID=100
+	  - TZ=America/Sao_Paulo
+	  - DARK_MODE=1
+	  - SECURE_CONNECTION=1
+	  - VNC_LISTENING_PORT=14000
+	  - VNC_PASSWORD=teste
+        
+    volumes:
+      - "/dockerapp/jdownloader-2:/config:rw"
+      - "/arquivos/jdownloader-2/Downloads:/output:rw"
