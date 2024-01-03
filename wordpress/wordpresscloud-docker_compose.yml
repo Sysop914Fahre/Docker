@@ -35,9 +35,8 @@ services:
       WORDPRESS_DB_USER: usuario
       WORDPRESS_DB_PASSWORD: 
       WORDPRESS_DB_NAME: wordpress
-	  #PHP_UPLOAD_LIMIT=300
+      #PHP_UPLOAD_LIMIT=300
       #PHP_MEMORY_LIMIT=512M
-
     volumes:
       - /mnt/dockerapp/wordpress:/var/www/html
     networks:
