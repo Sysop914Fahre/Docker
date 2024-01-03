@@ -1,0 +1,65 @@
+version: '3'
+
+
+services:
+  db:
+    image: mariadb
+    container_name: db
+    restart: unless-stopped
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - TZ=America/Sao_Paulo
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_DATABASE=wordpress #optional
+      - MYSQL_USER=renato #optional
+      - MYSQL_PASSWORD= #optional
+    volumes:
+      - /mnt/dockerapp/dbdata:/var/lib/mysql
+      - /mnt/dockerapp/mariadb/my.cnf:/etc/mysql/my.cnf
+    ports:
+      - 3306:3306
+    networks:
+      - app-network 
+
+  wordpress:
+    depends_on: 
+      - db
+    image: wordpress:6.4.2-php8.1-fpm
+    ports:
+        - '9000:9000'
+    container_name: wordpress
+    restart: unless-stopped
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: usuario
+      WORDPRESS_DB_PASSWORD: 
+      WORDPRESS_DB_NAME: wordpress
+	  #PHP_UPLOAD_LIMIT=300
+      #PHP_MEMORY_LIMIT=512M
+
+    volumes:
+      - /mnt/dockerapp/wordpress:/var/www/html
+    networks:
+      - app-network 
+
+  webserver:
+    depends_on:
+      - wordpress
+    image: nginx:mainline
+    container_name: webserver
+    restart: unless-stopped
+    ports:
+      - "29000:29000"
+      
+    volumes:
+      - /mnt/dockerapp/nginx/conf.d:/etc/nginx/conf.d
+      - /mnt/dockerapp/nginx:/etc/nginx
+      - /mnt/dockerapp/logs/nginx:/var/log/nginx
+      - /mnt/dockerapp/wordpress:/var/www/html
+    networks:
+      - app-network
+
+volumes:
+  wordpress:
+  dbdata:
